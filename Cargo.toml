@@ -1,0 +1,29 @@
+[package]
+name = "cipherstrike2" 
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+openssl = "0.10"
+rand = "0.8"
+walkdir = "2"
+
+[target.'cfg(all(target_os = "windows", target_env = "msvc"))'.dependencies]
+windows-sys = { version = "0.48", optional = true, features = [
+    "Win32_System_Threading",
+    "Win32_System_Diagnostics_Debug"
+]}
+
+[features]
+default = []
+msvc = ["windows-sys"]
+
+[profile.release]
+opt-level = 3
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[target.x86_64-pc-windows-gnu]
+linker = "x86_64-w64-mingw32-gcc"
