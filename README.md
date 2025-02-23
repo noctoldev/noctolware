@@ -52,3 +52,6 @@ This code serves as an educational example of ransomware mechanics, highlighting
 ---
 
 i'd like to thank zillakami for the music, caffiene and various other factors that helped me make this lmfao
+this as of feb 23rd is fully undetectable on virustotal.
+
+thank AI for the markdown
